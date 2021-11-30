@@ -35,10 +35,6 @@
 //identifiant du shader
 GLuint shader_program_id;
 
-//temps courant
-float temps_courant;
-int temps_preced = 0;
-
 GLuint vao;
 GLuint vbo;
 
@@ -85,20 +81,11 @@ static void init()
 //Fonction d'affichage
 static void display_callback()
 {
-
   //effacement des couleurs du fond d'ecran
-    if ((temps_courant - temps_preced >= 1) || temps_preced == 0) {
-        printf("chgmt couleur : %i", temps_preced);
-        temps_preced += 1;
-        glClearColor((float) rand() / RAND_MAX, (float) rand() / RAND_MAX, (float) rand() / RAND_MAX, 1.0f); CHECK_GL_ERROR();
-    }
-
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f); CHECK_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CHECK_GL_ERROR();
     //affichage triangle
-    //glDrawArrays(GL_LINE_LOOP, 0, 3); CHECK_GL_ERROR();
-    glPointSize(5.0);
-    glDrawArrays(GL_POINTS, 0, 3);
-    glDrawArrays(GL_LINE_LOOP, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 3); CHECK_GL_ERROR();
   //Changement de buffer d'affichage pour eviter un effet de scintillement
   glutSwapBuffers();
 }
@@ -129,7 +116,6 @@ static void timer_callback(int)
 {
   //demande de rappel de cette fonction dans 25ms
   glutTimerFunc(25, timer_callback, 0);
-  temps_courant += 25e-3;
 
   //reactualisation de l'affichage
   glutPostRedisplay();
